@@ -10,7 +10,7 @@ void testApp::setup(){
     receiver.setup(PORT_RECEIVE);
 
    // int mm = 20;
-    TOTAL = 1;
+    TOTAL = 40;
 
     dc_mean = 0;
     dc_std = 0;
