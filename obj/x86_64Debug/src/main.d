@@ -1,7 +1,6 @@
-obj/x86_64Debug/./src/main.d: src/main.cpp \
+obj/x86_64Debug/src/main.o: src/main.cpp \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/ofMain.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofConstants.h \
- /usr/local/of_v0.7.4_linux64_release/libs/glew/include/GL/glew.h \
  /usr/local/of_v0.7.4_linux64_release/libs/tess2/include/tesselator.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofFileUtils.h \
  /usr/local/of_v0.7.4_linux64_release/libs/poco/include/Poco/File.h \
@@ -97,7 +96,7 @@ obj/x86_64Debug/./src/main.d: src/main.cpp \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/app/ofAppRunner.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofSoundStream.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofBaseSoundStream.h \
- /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofPASoundStream.h \
+ /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofRtAudioSoundStream.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofSoundPlayer.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofBaseSoundPlayer.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofOpenALSoundPlayer.h \
@@ -274,8 +273,6 @@ obj/x86_64Debug/./src/main.d: src/main.cpp \
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/ofMain.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofConstants.h:
-
-/usr/local/of_v0.7.4_linux64_release/libs/glew/include/GL/glew.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/tess2/include/tesselator.h:
 
@@ -473,7 +470,7 @@ obj/x86_64Debug/./src/main.d: src/main.cpp \
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofBaseSoundStream.h:
 
-/usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofPASoundStream.h:
+/usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofRtAudioSoundStream.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofSoundPlayer.h:
 

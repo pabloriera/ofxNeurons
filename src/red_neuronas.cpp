@@ -8,6 +8,8 @@ Red_Neuronas::Red_Neuronas(){
 
 void Red_Neuronas::setup(int _TOTAL)
 {
+    send_osc = false;
+
     TOTAL = _TOTAL;
     Neuronas.assign(TOTAL,Neurona());
 
@@ -50,7 +52,7 @@ void Red_Neuronas::update()
 {
 
     for(int i = 0; i < TOTAL; i++)
-        if(Neuronas[i].update())
+        if(Neuronas[i].update() && send_osc)
             Neuronas[i].OSCevent(&sender);
 
     if (bool_syn_matrix)
@@ -148,6 +150,7 @@ void Red_Neuronas::reset()
 
 void Red_Neuronas::set_osc_server(ofxOscSender* _sender)
 {
+    send_osc = true;
     sender = *_sender;
 }
 

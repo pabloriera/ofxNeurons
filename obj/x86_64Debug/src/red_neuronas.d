@@ -1,8 +1,7 @@
-obj/x86_64Debug/./src/red_neuronas.d: src/red_neuronas.cpp \
+obj/x86_64Debug/src/red_neuronas.o: src/red_neuronas.cpp \
  src/red_neuronas.h src/neurona.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/ofMain.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofConstants.h \
- /usr/local/of_v0.7.4_linux64_release/libs/glew/include/GL/glew.h \
  /usr/local/of_v0.7.4_linux64_release/libs/tess2/include/tesselator.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofFileUtils.h \
  /usr/local/of_v0.7.4_linux64_release/libs/poco/include/Poco/File.h \
@@ -98,7 +97,7 @@ obj/x86_64Debug/./src/red_neuronas.d: src/red_neuronas.cpp \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/app/ofAppRunner.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofSoundStream.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofBaseSoundStream.h \
- /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofPASoundStream.h \
+ /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofRtAudioSoundStream.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofSoundPlayer.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofBaseSoundPlayer.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofOpenALSoundPlayer.h \
@@ -276,8 +275,6 @@ src/neurona.h:
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/ofMain.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofConstants.h:
-
-/usr/local/of_v0.7.4_linux64_release/libs/glew/include/GL/glew.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/tess2/include/tesselator.h:
 
@@ -475,7 +472,7 @@ src/neurona.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofBaseSoundStream.h:
 
-/usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofPASoundStream.h:
+/usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofRtAudioSoundStream.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/sound/ofSoundPlayer.h:
 

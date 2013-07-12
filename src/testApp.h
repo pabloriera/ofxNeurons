@@ -53,6 +53,7 @@ public:
         ofSoundStream soundStream;
 
         bool verbose;
+        int frame_rate;
 
 
 };

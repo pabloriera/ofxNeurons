@@ -1,9 +1,8 @@
-obj/x86_64Debug/addons/ofxOsc/src/ofxOscMessage.d: \
+obj/x86_64Debug/addons/ofxOsc/src/ofxOscMessage.o: \
  /usr/local/of_v0.7.4_linux64_release/addons/ofxOsc/src/ofxOscMessage.cpp \
  /usr/local/of_v0.7.4_linux64_release/addons/ofxOsc/src/ofxOscMessage.h \
  /usr/local/of_v0.7.4_linux64_release/addons/ofxOsc/src/ofxOscArg.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofConstants.h \
- /usr/local/of_v0.7.4_linux64_release/libs/glew/include/GL/glew.h \
  /usr/local/of_v0.7.4_linux64_release/libs/tess2/include/tesselator.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofLog.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofFileUtils.h \
@@ -33,8 +32,6 @@ obj/x86_64Debug/addons/ofxOsc/src/ofxOscMessage.d: \
 /usr/local/of_v0.7.4_linux64_release/addons/ofxOsc/src/ofxOscArg.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/utils/ofConstants.h:
-
-/usr/local/of_v0.7.4_linux64_release/libs/glew/include/GL/glew.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/tess2/include/tesselator.h:
 

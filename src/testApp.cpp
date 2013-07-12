@@ -4,13 +4,14 @@ void testApp::setup(){
 
     ofSetWindowTitle("ofxNeurons");
     ofEnableAlphaBlending();
-    ofSetFrameRate(200);
+    frame_rate = 30;
+    ofSetFrameRate(frame_rate);
 
-    sender.setup("192.168.1.111", PORT_SEND);
+    sender.setup("127.0.0.1", PORT_SEND);
     receiver.setup(PORT_RECEIVE);
 
    // int mm = 20;
-    TOTAL = 40;
+    TOTAL = 1;
 
     dc_mean = 0;
     dc_std = 0;
@@ -34,13 +35,13 @@ void testApp::setup(){
 
     verbose = true;
 
-    //soundStream.setup(this, 2, 0, sampleRate, bufferSize, 4);
+    soundStream.listDevices();
+    soundStream.setDeviceID(0);
+    soundStream.setup(this, 2, 0, sampleRate, bufferSize, 4);
 
 }
 
 void testApp::update(){
-
-    Red.update();
 
     while(receiver.hasWaitingMessages()){
 		// get the next message
@@ -128,11 +129,15 @@ void testApp::update(){
                 Red.Neuronas[i].FRset(fc,Q);
 		}
     }
+
+
+    //Red.update();
 }
 
 void testApp::draw(){
 
    	//ofBackgroundGradient(ofColor::gray, ofColor::black, OF_GRADIENT_CIRCULAR);
+   	ofSetWindowTitle(ofToString(ofGetFrameRate()));
    	ofBackground(ofColor::black);
     Red.draw();
 }
@@ -140,8 +145,14 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::audioOut(float * output, int bufferSize, int nChannels){
 
-//    for(int i=0; i<bufferSize; i++)
-//        Red.update();
+    for(int i=0; i<bufferSize; i++)
+    {
+        Red.update();
+        output[i*nChannels    ] = Red.Neuronas[0].Vscope.buff[1023];
+        output[i*nChannels + 1] = Red.Neuronas[0].Vscope.buff[1023];
+    }
+
+
 
 }
 //--------------------------------------------------------------
@@ -166,14 +177,14 @@ void testApp::keyReleased(int key){
 
     if(key=='a')
     {
-        dc_mean+= 1;
+        dc_mean+= .05;
         cout << "dc_mean= " << dc_mean << "\t" << "dc_std= " << dc_std << endl;
         Red.set_currents(dc_mean,dc_std);
     }
 
     if(key=='z')
     {
-        dc_mean-= 1;
+        dc_mean-= .05;
         cout << "dc_mean= " << dc_mean << "\t" << "dc_std= " << dc_std << endl;
         Red.set_currents(dc_mean,dc_std);
     }
@@ -199,12 +210,30 @@ void testApp::keyReleased(int key){
         Red.set_dts(global_dt);
     }
 
+    if(key=='o')
+    {
+        global_dt *= 1.1;
+        cout << "global_dt= " << global_dt << endl;
+        Red.set_dts(global_dt);
+    }
     if(key=='l')
     {
         global_dt /= 1.1;
         cout << "global_dt= " << global_dt << endl;
         Red.set_dts(global_dt);
     }
+
+    if(key=='u')
+    {
+        frame_rate++;
+        ofSetFrameRate(frame_rate);
+    }
+    if(key=='j')
+    {
+        frame_rate--;
+        ofSetFrameRate(frame_rate);
+    }
+
 
     if(key=='w')
         {Red.togg_syn_matrix();
@@ -219,6 +248,7 @@ void testApp::keyReleased(int key){
             cout << endl;
         }
     }
+
     if(key=='v')
         verbose = !verbose;
 
