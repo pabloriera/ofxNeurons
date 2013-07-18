@@ -53,6 +53,7 @@ public:
         ofSoundStream soundStream;
 
         bool verbose;
+        bool osc_enable;
         int frame_rate;
 
 

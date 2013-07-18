@@ -10,14 +10,14 @@ OF_ROOT = /usr/local/of_v0.7.4_linux64_release
 # for example search paths like:
 # USER_CFLAGS = -I src/objects
 
-USER_CFLAGS = 
+USER_CFLAGS =
 
 
 # USER_LDFLAGS allows to pass custom flags to the linker
 # for example libraries like:
 # USER_LD_FLAGS = libs/libawesomelib.a
 
-USER_LDFLAGS = 
+USER_LDFLAGS =
 
 
 # use this to add system libraries for example:

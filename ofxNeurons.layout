@@ -11,16 +11,16 @@
 		<Cursor position="19" topLine="0" />
 	</File>
 	<File name="src/neurona.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="4171" topLine="51" />
+		<Cursor position="1023" topLine="45" />
 	</File>
 	<File name="src/neurona.h" open="1" top="0" tabpos="5">
-		<Cursor position="1394" topLine="60" />
+		<Cursor position="814" topLine="34" />
 	</File>
 	<File name="src/red_neuronas.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="2728" topLine="91" />
+		<Cursor position="1074" topLine="75" />
 	</File>
 	<File name="src/red_neuronas.h" open="1" top="0" tabpos="4">
-		<Cursor position="561" topLine="10" />
+		<Cursor position="561" topLine="13" />
 	</File>
 	<File name="src/scope.cpp" open="1" top="0" tabpos="7">
 		<Cursor position="130" topLine="7" />
@@ -35,7 +35,7 @@
 		<Cursor position="152" topLine="0" />
 	</File>
 	<File name="src/testApp.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="130" topLine="0" />
+		<Cursor position="802" topLine="27" />
 	</File>
 	<File name="src/testApp.h" open="1" top="0" tabpos="6">
 		<Cursor position="1264" topLine="35" />

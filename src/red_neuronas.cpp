@@ -8,7 +8,7 @@ Red_Neuronas::Red_Neuronas(){
 
 void Red_Neuronas::setup(int _TOTAL)
 {
-    send_osc = false;
+    osc_enable = false;
 
     TOTAL = _TOTAL;
     Neuronas.assign(TOTAL,Neurona());
@@ -37,11 +37,11 @@ void Red_Neuronas::setup(int _TOTAL)
         Neuronas[i].instance = i;
     }
 
-    drawVoltage=true;
+    drawVoltage=false;
 
-    drawEvent=true;
+    drawEvent=false;
 
-    drawCircle=true;
+    drawCircle=false;
 
     drawFR=false;
 
@@ -52,15 +52,22 @@ void Red_Neuronas::update()
 {
 
     for(int i = 0; i < TOTAL; i++)
-        if(Neuronas[i].update() && send_osc)
-            Neuronas[i].OSCevent(&sender);
+        if(Neuronas[i].update() && osc_enable)
+        {
+                //SEND OSC MESSAGE
+                ofxOscMessage m;
+                m.setAddress("/neuron");
+                m.addIntArg(i);
+                sender.sendMessage(m);
+        }
+
 
     if (bool_syn_matrix)
         for(int i = 0; i < TOTAL; i++)
             for(int j = 0; j < TOTAL; j++)
             {
                 if (i!=j)
-                    Neuronas[j].currentBuffer( Matrix_Sinapsis[i][j].weigth, Matrix_Sinapsis[i][j].delay, &Neuronas[i].sp_buff );
+                    Neuronas[j].currentBuffer( Matrix_Sinapsis[i][j].weigth, Matrix_Sinapsis[i][j].delay, &Neuronas[i] );
             }
 }
 
@@ -150,7 +157,7 @@ void Red_Neuronas::reset()
 
 void Red_Neuronas::set_osc_server(ofxOscSender* _sender)
 {
-    send_osc = true;
+    osc_enable = true;
     sender = *_sender;
 }
 

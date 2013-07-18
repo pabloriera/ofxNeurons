@@ -7,19 +7,23 @@ void testApp::setup(){
     frame_rate = 30;
     ofSetFrameRate(frame_rate);
 
-    sender.setup("127.0.0.1", PORT_SEND);
-    receiver.setup(PORT_RECEIVE);
+    osc_enable = true;
+
+    if (osc_enable){
+        sender.setup("127.0.0.1", PORT_SEND);
+        receiver.setup(PORT_RECEIVE);
+    }
 
    // int mm = 20;
-    TOTAL = 1;
+    TOTAL = 12;
 
-    dc_mean = 0;
+    dc_mean = 4;
     dc_std = 0;
     syn_w_mean = 0;
     syn_w_std = 0;
     syn_d_mean = 0;
     syn_d_std = 0;
-    global_dt = 0.1;
+    global_dt = 0.01;
 
     Red.setup(TOTAL);
     Red.set_dts(global_dt);
@@ -28,10 +32,11 @@ void testApp::setup(){
     Red.set_syn_w_matrix(0.5, syn_w_mean, syn_w_std);
     Red.set_syn_d_matrix(syn_d_mean, syn_d_std);
 
-    Red.set_osc_server(&sender);
+    if (osc_enable)
+        Red.set_osc_server(&sender);
 
     sampleRate  = 44100;
-    bufferSize = 64;
+    bufferSize = 512;
 
     verbose = true;
 
@@ -43,91 +48,94 @@ void testApp::setup(){
 
 void testApp::update(){
 
-    while(receiver.hasWaitingMessages()){
-		// get the next message
-		ofxOscMessage m;
-		receiver.getNextMessage(&m);
+    if (osc_enable)
+    {
+        while(receiver.hasWaitingMessages()){
+            // get the next message
+            ofxOscMessage m;
+            receiver.getNextMessage(&m);
 
-		if(m.getAddress() == "/neurons_net/dc_mean_std" ){
-			// both the arguments are int32's
-			dc_mean = m.getArgAsFloat(0);
-			dc_std = m.getArgAsFloat(1);
-			Red.set_currents(dc_mean,dc_std);
-		}
+            if(m.getAddress() == "/neurons_net/dc_mean_std" ){
+                // both the arguments are int32's
+                dc_mean = m.getArgAsFloat(0);
+                dc_std = m.getArgAsFloat(1);
+                Red.set_currents(dc_mean,dc_std);
+            }
 
-		if(m.getAddress() == "/neurons_net/all_neurons_tau" ){
-			// both the arguments are int32's
-			for(int i =0 ; i< TOTAL;i++)
-                Red.Neuronas[i].tau = MAX(m.getArgAsFloat(0),0.0001);
-            if(verbose)
-                cout << "tau= " << m.getArgAsFloat(0) << endl;
-		}
+            if(m.getAddress() == "/neurons_net/all_neurons_tau" ){
+                // both the arguments are int32's
+                for(int i =0 ; i< TOTAL;i++)
+                    Red.Neuronas[i].tau = MAX(m.getArgAsFloat(0),0.0001);
+                if(verbose)
+                    cout << "tau= " << m.getArgAsFloat(0) << endl;
+            }
 
-		if(m.getAddress() == "/neurons_net/syn_w_mean_std" ){
+            if(m.getAddress() == "/neurons_net/syn_w_mean_std" ){
 
-            type_prop = (float)m.getArgAsFloat(0);
-			syn_w_mean = (float)m.getArgAsFloat(1);
-			syn_w_std = (float)m.getArgAsFloat(2);
-			Red.set_syn_w_matrix(type_prop, syn_w_mean,syn_w_std);
-			if(verbose)
-                cout << "syn_w_mean= " << syn_w_mean << "\t" << "syn_w_std= " << syn_w_std << endl;
-		}
+                type_prop = (float)m.getArgAsFloat(0);
+                syn_w_mean = (float)m.getArgAsFloat(1);
+                syn_w_std = (float)m.getArgAsFloat(2);
+                Red.set_syn_w_matrix(type_prop, syn_w_mean,syn_w_std);
+                if(verbose)
+                    cout << "syn_w_mean= " << syn_w_mean << "\t" << "syn_w_std= " << syn_w_std << endl;
+            }
 
-        if(m.getAddress() == "/neurons_net/syn_d_mean_std" ){
+            if(m.getAddress() == "/neurons_net/syn_d_mean_std" ){
 
-			syn_d_mean = (float)m.getArgAsFloat(0);
-			syn_d_std = (float)m.getArgAsFloat(1);
-			Red.set_syn_d_matrix(syn_d_mean,syn_d_std);
-			if(verbose)
-                cout << "syn_d_mean= " << syn_d_mean << "\t" << "syn_d_std= " << syn_d_std << endl;
-		}
+                syn_d_mean = (float)m.getArgAsFloat(0);
+                syn_d_std = (float)m.getArgAsFloat(1);
+                Red.set_syn_d_matrix(syn_d_mean,syn_d_std);
+                if(verbose)
+                    cout << "syn_d_mean= " << syn_d_mean << "\t" << "syn_d_std= " << syn_d_std << endl;
+            }
 
-		if(m.getAddress() == "/neurons_net/neuron_dc" ){
+            if(m.getAddress() == "/neurons_net/neuron_dc" ){
 
-            int n = (int)m.getArgAsFloat(0);
-            n = (int) CLAMP(n,0,TOTAL-1);
-			Red.Neuronas[n].dc =(float) m.getArgAsFloat(1);
-			if(verbose)
-                cout << "neuron "<< n << " dc=" << Red.Neuronas[n].dc << endl;
-		}
+                int n = (int)m.getArgAsFloat(0);
+                n = (int) CLAMP(n,0,TOTAL-1);
+                Red.Neuronas[n].dc =(float) m.getArgAsFloat(1);
+                if(verbose)
+                    cout << "neuron "<< n << " dc=" << Red.Neuronas[n].dc << endl;
+            }
 
-		if(m.getAddress() == "/neurons_net/neuron_type" ){
+            if(m.getAddress() == "/neurons_net/neuron_type" ){
 
-            int n = (int)m.getArgAsFloat(0);
-            n = (int) CLAMP(n,0,TOTAL-1);
-			Red.Neuronas[n].syn_type = (float) m.getArgAsFloat(1)*2-1;
-			if(verbose)
-                cout << "neuron "<< n << " type=" << Red.Neuronas[n].dc << endl;
-		}
-		if(m.getAddress() == "/neurons_net/syn_w" ){
+                int n = (int)m.getArgAsFloat(0);
+                n = (int) CLAMP(n,0,TOTAL-1);
+                Red.Neuronas[n].syn_type = (float) m.getArgAsFloat(1)*2-1;
+                if(verbose)
+                    cout << "neuron "<< n << " type=" << Red.Neuronas[n].dc << endl;
+            }
+            if(m.getAddress() == "/neurons_net/syn_w" ){
 
-            int i =(int) m.getArgAsFloat(0);
-            int j = (int) m.getArgAsFloat(1);
-            i = (int) CLAMP(i,0,TOTAL-1);
-            j = (int) CLAMP(j,0,TOTAL-1);
-			Red.Matrix_Sinapsis[i][j].weigth =(float) m.getArgAsFloat(2);
-			if(verbose)
-                cout << i<< " "<< j <<  " " << Red.Matrix_Sinapsis[i][j].weigth << endl;
-		}
+                int i =(int) m.getArgAsFloat(0);
+                int j = (int) m.getArgAsFloat(1);
+                i = (int) CLAMP(i,0,TOTAL-1);
+                j = (int) CLAMP(j,0,TOTAL-1);
+                Red.Matrix_Sinapsis[i][j].weigth =(float) m.getArgAsFloat(2);
+                if(verbose)
+                    cout << i<< " "<< j <<  " " << Red.Matrix_Sinapsis[i][j].weigth << endl;
+            }
 
-		if(m.getAddress() == "/neurons_net/syn_d" ){
+            if(m.getAddress() == "/neurons_net/syn_d" ){
 
-            int i =(int) m.getArgAsFloat(0);
-            int j = (int) m.getArgAsFloat(1);
-            i = (int) CLAMP(i,0,TOTAL-1);
-            j = (int) CLAMP(j,0,TOTAL-1);
-			Red.Matrix_Sinapsis[i][j].delay =(float) m.getArgAsFloat(2);
-			if(verbose)
-                cout << i<< " "<< j <<  " " << Red.Matrix_Sinapsis[i][j].delay << endl;
-		}
+                int i =(int) m.getArgAsFloat(0);
+                int j = (int) m.getArgAsFloat(1);
+                i = (int) CLAMP(i,0,TOTAL-1);
+                j = (int) CLAMP(j,0,TOTAL-1);
+                Red.Matrix_Sinapsis[i][j].delay =(float) m.getArgAsFloat(2);
+                if(verbose)
+                    cout << i<< " "<< j <<  " " << Red.Matrix_Sinapsis[i][j].delay << endl;
+            }
 
-        if(m.getAddress() == "/neurons_net/fr_set" ){
+            if(m.getAddress() == "/neurons_net/fr_set" ){
 
-            float fc = m.getArgAsFloat(0);
-            float Q = m.getArgAsFloat(1);
-            for(int i =0 ; i< TOTAL;i++)
-                Red.Neuronas[i].FRset(fc,Q);
-		}
+                float fc = m.getArgAsFloat(0);
+                float Q = m.getArgAsFloat(1);
+                for(int i =0 ; i< TOTAL;i++)
+                    Red.Neuronas[i].FRset(fc,Q);
+            }
+        }
     }
 
 
@@ -140,6 +148,7 @@ void testApp::draw(){
    	ofSetWindowTitle(ofToString(ofGetFrameRate()));
    	ofBackground(ofColor::black);
     Red.draw();
+
 }
 
 //--------------------------------------------------------------
@@ -148,8 +157,17 @@ void testApp::audioOut(float * output, int bufferSize, int nChannels){
     for(int i=0; i<bufferSize; i++)
     {
         Red.update();
-        output[i*nChannels    ] = Red.Neuronas[0].Vscope.buff[1023];
-        output[i*nChannels + 1] = Red.Neuronas[0].Vscope.buff[1023];
+
+        float outL = 0,outR = 0;
+
+        for(int j=0; j<TOTAL; j++)
+        {
+            outL +=  Red.Neuronas[j].Vnorm *(float)j/(float)TOTAL;
+            outR +=  Red.Neuronas[j].Vnorm *(float)(TOTAL-j)/(float)TOTAL;
+        }
+
+        output[i*nChannels    ] = outL;
+        output[i*nChannels + 1] = outR;
     }
 
 

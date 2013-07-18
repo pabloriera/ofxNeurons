@@ -26,7 +26,7 @@
         void togg_syn_matrix();
 
         void set_osc_server(ofxOscSender* _sender);
-        bool send_osc;
+        bool osc_enable;
 
         vector <Neurona> Neuronas;
         vector<vector<Sinapsis> > Matrix_Sinapsis;

@@ -11,14 +11,10 @@
 
         visEvent_width = ofGetWindowWidth()*.4;
 
-
-
         sp_bufferSize = 8192;
-        for (int i=0;i < sp_bufferSize;i++)
-            sp_buff.push_back(0.0f);
-
         sp_buff.assign(sp_bufferSize,0.0);
         //cout <<"SETUP_size= "<< sp_buff.size() << endl;
+        sp_buff_ptr = 0;
 
         vis_circle_radio0 = visEvent_height/8.0;
         vis_circle_radio0 = MAX(4,vis_circle_radio0);
@@ -58,7 +54,8 @@
         V = V + (0.04*V*V + 5*V + 140 - u + I)*dt;
         u = u + a*(b*V-u)*dt;
 
-        Vscope.update(ofMap(V,minV,maxV,0,1));
+        Vnorm = ofMap(V,minV,maxV,0,1);
+        Vscope.update(Vnorm);
 
         event = false;
 
@@ -72,8 +69,8 @@
             s0 = syn_type;
         }
 
-        FRcalc();
-        FRscope.update(ofMap(FR,0,5,0,1));
+        //FRcalc();
+        //FRscope.update(ofMap(FR,0,5,0,1));
 
         sp = sp - sp*dt/tau;
         sp = sp + s0;
@@ -81,9 +78,16 @@
         //if (sp<0.00001)
          //   sp = 0.0;
 
-        for(int i = 0; i<sp_bufferSize-1;i++)
-            sp_buff[i]=sp_buff[i+1];
-        sp_buff[sp_bufferSize-1] = sp;
+        sp_buff_ptr++;
+
+        if(sp_buff_ptr>sp_bufferSize)
+            sp_buff_ptr = 0;
+
+        sp_buff[sp_buff_ptr] = sp;
+
+//        for(int i = 0; i<sp_bufferSize-1;i++)
+//            sp_buff[i]=sp_buff[i+1];
+//        sp_buff[sp_bufferSize-1] = sp;
 
         //cout << "UPDATE_size=" << sp_buff.size() << endl;
 
@@ -105,19 +109,17 @@
         return event;
     }
 
-    void Neurona::currentBuffer(float w, float d, vector<float>* buff){
+    void Neurona::currentBuffer(float w, float d, Neurona* _neurona){
 
-        if(ofGetKeyPressed(OF_KEY_PAGE_DOWN))
-        {
-            cout << "w=" << w << "\td=" << d << endl;
-            cout << "dpos=" << sp_bufferSize - MIN(sp_bufferSize, d) -1;
-            cout << "\t at(end)"<< buff->at(buff->size()-1);
-            cout << "\t size"<< buff->size();
 
-            cout << "\t buff=" << buff->at((size_t)(sp_bufferSize - MIN(sp_bufferSize, d )-1))  << endl;
-        }
 
-        Ibuf += w * buff->at((size_t)(sp_bufferSize - MIN(sp_bufferSize, d) - 1 ));
+        int now = _neurona->sp_buff_ptr;
+        int past = now - d;
+        if (past<0)
+            past += _neurona->sp_bufferSize;
+
+        Ibuf += w * _neurona->sp_buff[ past ];
+
     }
 
     void Neurona::reset(){
@@ -151,13 +153,6 @@
         Vscope.reset();
         FRscope.reset();
         }
-
-    void Neurona::OSCevent(ofxOscSender* sender){
-        ofxOscMessage m;
-		m.setAddress("/neuron");
-		m.addIntArg(instance);
-		sender->sendMessage(m);
-    }
 
     void Neurona::FRset(float Fc,float Q){
 

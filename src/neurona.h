@@ -10,13 +10,11 @@
     public:
         Neurona();
 
-        void currentBuffer(float w, float d,vector<float>* buff);
+        void currentBuffer(float w, float d,Neurona* _neurona);
         void reset();
 
         void setup(float visEvent_height);
         bool update();
-
-        void OSCevent(ofxOscSender* sender);
 
         void drawCircle();
         void drawEvent();
@@ -44,6 +42,7 @@
         float t;
         float dt;
         float V,u;
+        float Vnorm;
 
         //Synaptic variables
         float sp,s0;
@@ -52,6 +51,7 @@
         //vector buffers
         vector<float> sp_buff;
         int sp_bufferSize;
+        int sp_buff_ptr;
 
         int syn_type;
         bool fix_syn_type;
